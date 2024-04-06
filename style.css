@@ -22,3 +22,6 @@ h1{
     align-content: center;
 }
 
+#select-body > p{
+    margin-bottom: -0.0001px;
+}
