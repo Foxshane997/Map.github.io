@@ -1,5 +1,5 @@
-// console.log('hi')
 let myMap;
+let markers = [];
 
 /* Getting user coordinates start */
 async function getCoords(){
@@ -12,51 +12,104 @@ console.log(getCoords())
 /* Getting user location end  */
 
 /* Adding map start */
-
 async function createMap(){
     let coords = await getCoords();
-    const myMap = L.map('map').setView(coords, 15);
+    myMap = L.map('map').setView(coords, 15);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
 }).addTo(myMap);
 
+
+// marker for user 
 const marker = L.marker(coords).addTo(myMap)
-marker.bindPopup('<p1><b>My Location</b></p1>').openPopup()
+marker.bindPopup('<p1><b> You are Here. </b></p1>').openPopup()
 }
 createMap()
 
-/* Adding map end */
 
-// query Foursquare API for locations the user selects
-async function placeSearch(selection, coords) {
-    try {
-        const searchParams = new URLSearchParams({
-          query: selection,
-          ll: coords,
-          open_now: 'true',
-          sort: 'DISTANCE'
-        });
-        const results = await fetch(
-          `https://api.foursquare.com/v3/places/search?${searchParams}`,
-          {
-            method: 'GET',
-            headers: {
-              Accept: 'application/json',
-              Authorization: 'fsq3VdkyX8R8j/VCAEqNrnYWw7YcdSyv9G8JWIbAlwleyp4=',
-            }
+async function search() {
+  let userLocation= await getCoords()
+  let businessType = document.getElementById('select-body')
+
+  businessType.addEventListener('change', async (event) => {
+    markers.forEach(marker => myMap.removeLayer(marker))
+    markers = [];
+
+    let userChoice = event.target.value;
+    try{
+      const options = {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: 'fsq33uEhSPTopewko+7dyX63tWzq2Gi2Xbmy+jRwEuYEpSI='
+        }
+      };
+     let response = await fetch(`https://api.foursquare.com/v3/places/search?query=${userChoice}&11=${userLocation}&limit=5`, options)
+     let data = await response.json();
+     console.log(data)
+
+    // location of each location or "data"
+    let locations = data.results.map(result =>({
+      name: result.name,
+      latlng: [result.geocodes.main.latitude, result.geocodes.main.longitude],
+    }))
+    console.log(locations)
+
+    // Adding the markers
+    locations.forEach(location => {
+      let marker = L.marker(location.latlng).addTo(myMap)
+      marker.bindPopup(`${location.name} `).openPopup();
+      markers.push(marker);async function search() {
+        let userLocation= await getCoords()
+        let businessType = document.getElementById('select-body')
+      
+        businessType.addEventListener('change', async (event) => {
+          markers.forEach(marker => myMap.removeLayer(marker))
+      
+          let userChoice = event.target.value;
+          try{
+            const options = {
+              method: 'GET',
+              headers: {
+                accept: 'application/json',
+                Authorization: 'fsq33uEhSPTopewko+7dyX63tWzq2Gi2Xbmy+jRwEuYEpSI='
+              }
+            };
+           let response = await fetch(`https://api.foursquare.com/v3/places/search?query=${userChoice}&11=${userLocation}&limit=5`, options)
+           let data = await response.json();
+           console.log(data)
+      
+          // location of each location or "data"
+          let locations = data.results.map(result =>({
+            name: result.name,
+            latlng: [result.geocodes.main.latitude, result.geocodes.main.longitude],
+          }))
+          console.log(locations)
+      
+          // Adding the markers
+          locations.forEach(location => {
+            let marker = L.marker(location.latlng).addTo(myMap)
+            marker.bindPopup(`${location.name}`).openPopup();
+            markers.push(marker)
+          })
+      
           }
-        );
-        const data = await results.json();
-        return data;
-    } catch (err) {
-        console.error(err);
+          catch(error){
+            console.log("Fetch Error", error)
+          }
+        })
+      }
+      
+      search()
+    })
+
     }
+    catch(error){
+      console.log("Fetch Error", error)
+    }
+  })
 }
+search()
 
-/* Events start */
-
-
-
-/* Events end */
