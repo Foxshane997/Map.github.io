@@ -1,27 +1,57 @@
+/* Body */
 body {
-    background-color: #b2ab9f;
-    color: #2b2b2b;
+    background-color: #e0e5ec; /* Lighter background for neumorphism */
+    color: #333; /* Slightly darker text for contrast */
+    font-family: Arial, sans-serif; /* Smooth font for neumorphic design */
 }
 
-main{
+/* Main container */
+main {
     justify-content: center;
     display: flex;
     flex-direction: column;
+    padding: 20px; /* Add some padding for spacing */
 }
 
-#map{
+/* Map container */
+#map {
     height: 80vh;
     width: 99vw;
-    background-color: aliceblue;
-    border: 2px solid lightslategray;
+    background-color: #f2f2f2; /* Light background for the map area */
+    border-radius: 12px; /* Rounded corners for a soft look */
+    box-shadow: 8px 8px 15px #a1a1a1, -8px -8px 15px #ffffff; /* Neumorphic shadow effect */
+    border: none; /* Remove default border */
 }
 
-h1{
+/* Heading */
+h1 {
     text-align: center;
     height: 5vh;
-    align-content: center;
+    margin: 20px 0; /* Add margin for spacing */
+    color: #555; /* Slightly darker color for text */
+    font-weight: 300; /* Lighter font weight for a soft look */
 }
 
-#select-body > p{
-    margin-bottom: -0.0001px;
+/* Select body paragraph */
+#select-body > p {
+    margin-bottom: 10px; /* Adjusted margin for spacing */
+    color: #666; /* Slightly darker color for text */
+    font-size: 16px; /* Readable font size */
+}
+
+/* Optional: Add neumorphic button styles if needed */
+button {
+    background: #e0e5ec;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 8px 8px 15px #a1a1a1, -8px -8px 15px #ffffff;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #333;
+    cursor: pointer;
+    transition: box-shadow 0.3s ease;
+}
+
+button:hover {
+    box-shadow: inset 4px 4px 8px #a1a1a1, inset -4px -4px 8px #ffffff;
 }
